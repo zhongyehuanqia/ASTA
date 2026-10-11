@@ -1,0 +1,79 @@
+# 算法组第一轮学习笔记
+
+姓名：（填写你的姓名）
+
+日期：2026-10-11
+
+仓库链接：（推到远程后把地址贴在这里）
+
+## 一、任务清单
+
+- 完成了什么
+  - [ ] VS Code 打开本仓库
+  - [ ] Git 配置姓名和邮箱
+  - [ ] 本地仓库初始化，并完成第一次提交
+  - [ ] 推到 GitHub 或实验室指定的远程
+  - [ ] 终端运行 `git status`、`git log` 并截图
+- 没完成什么
+  - YOLO 检测（Day 4–6）
+  - PX4 250 框架阅读（Day 8–9）
+
+## 二、操作记录
+
+- 命令 + 截图
+- 关键步骤说明
+
+### 1. 配置 Git（每人自己的姓名和邮箱，只做一次）
+
+```bash
+git config --global user.name "你的姓名"
+git config --global user.email "你的邮箱"
+git config --global --list
+```
+
+把 `git config --global --list` 的终端截图放到 `shots/`，例如 `shots/git-config.png`。
+
+### 2. 查看仓库状态
+
+在仓库目录里执行：
+
+```bash
+cd ~/桌面/algo-week1
+git status
+git log --oneline
+```
+
+截图保存为 `shots/git-status-log.png`，并在下面写一句你看到了什么。
+
+- 截图：
+- 说明：
+
+### 3. 推到远程
+
+在 GitHub（或实验室平台）新建空仓库 `algo-week1`，不要勾选自动生成 README。然后：
+
+```bash
+git remote add origin <仓库地址>
+git branch -M main
+git push -u origin main
+```
+
+把仓库地址填回本文件开头的「仓库链接」。
+
+## 三、报错库
+
+| 日期 | 模块 | 报错/现象 | 原因 | 解决 | 参考 |
+| --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  |
+
+## 四、代码/文件
+
+| 文件路径 | 作用说明 |
+| --- | --- |
+| `notes.md` | 学习笔记，最后整份交到飞书 |
+| `shots/` | 操作截图 |
+
+## 五、小结与疑问
+
+- 学到了什么
+- 还没懂什么
