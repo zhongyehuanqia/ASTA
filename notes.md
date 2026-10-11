@@ -1,18 +1,18 @@
 # 算法组第一轮学习笔记
 
-姓名：（填写你的姓名）
+姓名：zhongyehuanqia
 
 日期：2026-10-11
 
-仓库链接：（推到远程后把地址贴在这里）
+仓库链接：https://github.com/zhongyehuanqia/algo-week1
 
 ## 一、任务清单
 
 - 完成了什么
   - [ ] VS Code 打开本仓库
-  - [ ] Git 配置姓名和邮箱
-  - [ ] 本地仓库初始化，并完成第一次提交
-  - [ ] 推到 GitHub 或实验室指定的远程
+  - [x] Git 配置姓名和邮箱
+  - [x] 本地仓库初始化，并完成第一次提交
+  - [x] 推到 GitHub 或实验室指定的远程
   - [ ] 终端运行 `git status`、`git log` 并截图
 - 没完成什么
   - YOLO 检测（Day 4–6）
@@ -50,15 +50,12 @@ git log --oneline
 
 ### 3. 推到远程
 
-在 GitHub（或实验室平台）新建空仓库 `algo-week1`，不要勾选自动生成 README。然后：
+远程仓库：https://github.com/zhongyehuanqia/algo-week1.git
 
 ```bash
-git remote add origin <仓库地址>
-git branch -M main
+git remote add origin https://github.com/zhongyehuanqia/algo-week1.git
 git push -u origin main
 ```
-
-把仓库地址填回本文件开头的「仓库链接」。
 
 ## 三、报错库
 
