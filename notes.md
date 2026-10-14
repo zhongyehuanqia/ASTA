@@ -15,9 +15,10 @@
   - [x] 建立本地仓库，推到 GitHub，保留提交记录
   - [x] 安装 Ultralytics，用预训练模型 `yolov8n.pt` 检测图片和视频
   - [x] 检测代码写在 `vision/detect.py`，结果截图放在 `shots/`
+- 完成了什么（续）
+  - [x] PX4 250 框架初读。源码在 `/home/qia/PX4-Autopilot`，框架图和问题清单在 `px4/framework.md`
 - 没完成什么
   - [ ] USB 摄像头实时检测。机器上还没有 `/dev/video*`，步骤写在第二节第 6 小节，摄像头到了再做
-  - [ ] PX4 250 框架阅读：目录、状态机、通信，以及框架图和问题清单（Day 8–9）
 
 ## 二、操作记录
 
@@ -119,6 +120,23 @@ python detect.py --source 0
 - [ ] `python detect.py --source 0` 能实时出框
 - [ ] 截图保存到 `shots/yolo-camera.jpg`
 
+### 7. PX4 250 框架初读
+
+本机原来没有飞控源码，只浅克隆了官方主仓库，没有拉取子模块：
+
+```bash
+git clone --depth 1 --single-branch --branch main https://github.com/PX4/PX4-Autopilot.git ~/PX4-Autopilot
+```
+
+阅读提交是 `49b856b5`。框架图、目录、状态机位置、通信位置和问题清单写在 `px4/framework.md`。
+
+三句话能讲清楚：
+
+- 目录主体在 `src/modules`、`src/drivers`、`msg`、`ROMFS`。
+- 状态机在 `src/modules/commander/`，解锁看 `arming_state`，飞行模式看 `nav_state`。
+- 对外通信在 `src/modules/mavlink/`，模块之间用 `platforms/common/uORB` 和 `msg/`。
+- 250 是机架参数：`ROMFS/px4fmu_common/init.d/airframes/4050_generic_250` 和 `4052_holybro_qav250`。
+
 ## 三、报错库
 
 | 日期 | 模块 | 报错/现象 | 原因 | 解决 | 参考 |
@@ -138,6 +156,8 @@ python detect.py --source 0
 | `vision/bus.jpg` | 图片检测用的输入图，不提交到 Git |
 | `vision/runs/` | Ultralytics 自动生成的检测结果，不提交到 Git |
 | `~/venvs/yolo` | 虚拟环境，不放进仓库 |
+| `px4/framework.md` | PX4 250 的目录、状态机、通信和问题清单 |
+| `~/PX4-Autopilot` | PX4 固件源码，体积大，不放进本仓库 |
 
 `detect.py` 的用法：
 
@@ -154,7 +174,9 @@ python detect.py --source 0
   - 推送到 GitHub 时，Password 要填勾选了 `repo` 的 Token。Token 只在生成时显示一次，丢了就重新生成。
   - 视觉环境单独放在 `~/venvs/yolo`，避免和系统 Python 混在一起。进入环境后提示符前面有 `(yolo)`。
   - `yolov8n.pt` 是现成的预训练权重。图片和视频都能检出人；图片里还检出了公交车。
+  - PX4 的状态机在 `src/modules/commander/`，对外通信在 `src/modules/mavlink/`，模块之间用 uORB。250 是机架参数文件，不是另一套代码。
 - 还没懂什么
   - Token 过期之后，本机如果记住了旧 Token，要在哪里清掉再换新的。
   - 摄像头编号为什么是 `0`，插上两个摄像头时怎么区分。
-  - PX4 250 的目录、状态机和通信文件还没开始看。
+  - `arming_state` 和 `nav_state` 的具体取值还没逐个对过。
+  - 地面站的解锁命令怎样一步步进到 commander，还没顺着函数看完。
