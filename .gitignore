@@ -3,3 +3,7 @@ __pycache__/
 .venv/
 venv/
 .DS_Store
+vision/runs/
+vision/*.pt
+vision/*.mp4
+vision/bus.jpg

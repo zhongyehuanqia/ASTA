@@ -15,7 +15,7 @@
   - [x] 推到 GitHub：https://github.com/zhongyehuanqia/algo-week1
   - [x] 终端运行 `git status`、`git log` 并截图
 - 没完成什么
-  - YOLO 检测（Day 4–6）
+  - USB 摄像头实时检测（现在没有摄像头，图片和视频已经跑通）
   - PX4 250 框架阅读（Day 8–9）
 
 ## 二、操作记录
@@ -70,6 +70,36 @@ git remote add origin https://github.com/zhongyehuanqia/algo-week1.git
 git push -u origin main
 ```
 
+### 4. 用图片跑 YOLO 预训练检测
+
+进入虚拟环境后，在 `vision` 目录执行：
+
+```bash
+source ~/venvs/yolo/bin/activate
+cd ~/桌面/algo-week1/vision
+yolo predict model=yolov8n.pt source='https://ultralytics.com/images/bus.jpg'
+```
+
+第一次运行会下载权重 `yolov8n.pt`。检测结果在 `vision/runs/detect/predict/bus.jpg`，截图已复制到 `shots/yolo-bus.jpg`。
+
+![图片检测结果](shots/yolo-bus.jpg)
+
+说明：预训练模型框出了公交车和行人。当时没有 USB 摄像头，所以先用图片跑通。
+
+### 5. 用视频跑同一份代码
+
+检测脚本是 `vision/detect.py`。视频文件是 `vision/sample.mp4`。
+
+```bash
+source ~/venvs/yolo/bin/activate
+cd ~/桌面/algo-week1/vision
+python detect.py --source sample.mp4
+```
+
+结果视频写在 `vision/runs/detect/predict-2/sample.avi`。终端里每一帧会打印检测到的类别，例如 `1 person`。下面是其中一帧，框出了沙滩上的人：
+
+![视频检测结果](shots/yolo-video.jpg)
+
 ## 三、报错库
 
 | 日期 | 模块 | 报错/现象 | 原因 | 解决 | 参考 |
@@ -81,7 +111,10 @@ git push -u origin main
 | 文件路径 | 作用说明 |
 | --- | --- |
 | `notes.md` | 学习笔记，最后整份交到飞书 |
-| `shots/` | 操作截图 |
+| `shots/` | 操作截图和检测结果图 |
+| `vision/detect.py` | 用 YOLOv8n 检测图片或视频，结果保存到 `runs/detect/` |
+| `vision/yolov8n.pt` | 预训练权重，不提交到 Git，本机运行时使用 |
+| `vision/sample.mp4` | 用来代替摄像头的示例视频，不提交到 Git |
 
 ## 五、小结与疑问
 
@@ -92,4 +125,5 @@ git push -u origin main
   - 推送时 Password 要填 Token，不是 GitHub 登录密码。
 - 还没懂什么
   - Token 过期之后要不要重新生成，本地会不会还记着旧 Token。
-  - YOLO 检测和 PX4 250 框架还没开始。
+  - 用虚拟环境安装 Ultralytics，并用 `yolov8n.pt` 对图片和视频做了预训练检测。
+  - USB 摄像头还没接上。PX4 250 框架还没开始读。
