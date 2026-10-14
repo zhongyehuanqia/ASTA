@@ -5,6 +5,7 @@
     source ~/venvs/yolo/bin/activate
     python detect.py --source bus.jpg
     python detect.py --source sample.mp4
+    python detect.py --source 0          # 插入 USB 摄像头后再用
 
 画好框的结果保存在 runs/detect/ 下。
 """

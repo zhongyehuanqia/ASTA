@@ -100,6 +100,23 @@ python detect.py --source sample.mp4
 
 ![视频检测结果](shots/yolo-video.jpg)
 
+### 6. 后续：USB 摄像头实时检测
+
+摄像头插上之后再做。先确认系统能看到设备，再沿用 `vision/detect.py`，把输入从视频文件改成摄像头编号 `0`。
+
+```bash
+ls /dev/video*
+source ~/venvs/yolo/bin/activate
+cd ~/桌面/algo-week1/vision
+python detect.py --source 0
+```
+
+屏幕上应出现实时画面和检测框。按 `q` 或在终端按 Ctrl+C 结束。截一张带检测框的画面，保存为 `shots/yolo-camera.jpg`，并在这里补上截图和说明。
+
+- [ ] 摄像头已插入，`/dev/video*` 存在
+- [ ] `python detect.py --source 0` 能实时出框
+- [ ] 截图保存到 `shots/yolo-camera.jpg`
+
 ## 三、报错库
 
 | 日期 | 模块 | 报错/现象 | 原因 | 解决 | 参考 |
@@ -123,7 +140,7 @@ python detect.py --source sample.mp4
   - `git status` 看有没有未提交的改动，`git log` 看提交记录。
   - 用 `code ~/桌面/algo-week1` 可以在 VS Code 里打开整个仓库。
   - 推送时 Password 要填 Token，不是 GitHub 登录密码。
+  - 用虚拟环境安装 Ultralytics，并用 `yolov8n.pt` 对图片和视频做了预训练检测。
 - 还没懂什么
   - Token 过期之后要不要重新生成，本地会不会还记着旧 Token。
-  - 用虚拟环境安装 Ultralytics，并用 `yolov8n.pt` 对图片和视频做了预训练检测。
-  - USB 摄像头还没接上。PX4 250 框架还没开始读。
+  - USB 摄像头还没接上，实时检测留在第六节。PX4 250 框架还没开始读。
