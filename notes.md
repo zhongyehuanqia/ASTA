@@ -18,10 +18,10 @@
 - 完成了什么（续）
   - [x] PX4 250 框架初读。源码在 `/home/qia/PX4-Autopilot`，框架图和问题清单在 `px4/framework.md`
   - [x] USB 摄像头实时检测。设备是 `/dev/video0`，结果在 `shots/yolo-camera.jpg`
-  - [x] Day 10–11 选做了概念整理，没有做自采自标训练。说明在第二节第 8 小节
+  - [x] Day 10–11 概念整理和一次训练都做了。30 张来自 USB 摄像头，训练曲线在 `shots/yolo-train.png`
   - [x] 三分钟讲解稿在第二节第 9 小节。飞书仍需自己把这份笔记贴上去
 - 没完成什么
-  - 自采 20–30 张并自己标注后再训练。这次用概念笔记代替了这一项。
+  - 框是预训练模型自动标的，不是手动画的。如果验收要求手标，需要再改 `vision/dataset/labels/`。
 
 ## 二、操作记录
 
@@ -146,13 +146,13 @@ git clone --depth 1 --single-branch --branch main https://github.com/PX4/PX4-Aut
 
 ### 8. YOLO 概念整理
 
-Day 10–11 的自采自标训练没有做，按任务单改成交接这份概念笔记。下面这些词都对应这次已经跑过的 `yolov8n.pt`。
+概念和训练都做了。下面这些词对应已经跑过的 `yolov8n.pt`，训练用的是 USB 摄像头新拍的 30 张。
 
 预训练和自己训练：
 
 - `yolov8n.pt` 是别人用大型数据集训练好的权重。`n` 表示 nano，模型小、速度快，适合先跑通。
 - 直接 `predict` 就是用现成权重做检测。图片里的 bus、person，视频里的 person，摄像头里的 person 和 dining table，都是这套权重认出来的。
-- 自己训练是换一批自己拍的图，标好框，再让模型多认识你的目标。这次没有拍 20–30 张，也没有标注，所以没有产生新的权重。
+- 自己训练是换一批自己拍的图，标好框，再从预训练权重继续学。这次用 Realtek RGB Camera 拍了 30 张，其中 24 张训练、6 张验证。框由预训练模型自动标出 `person`，类别编号写成 0。照片留在本机 `vision/dataset/`，不放进 Git。
 
 一次检测里发生的事：
 
@@ -170,6 +170,28 @@ Day 10–11 的自采自标训练没有做，按任务单改成交接这份概�
 | 图片结果 | `shots/yolo-bus.jpg` |
 | 视频结果 | `shots/yolo-video.jpg` |
 | 摄像头结果 | `shots/yolo-camera.jpg` |
+| 自动标注预览 | `shots/yolo-label-preview.jpg` |
+| 训练曲线 | `shots/yolo-train.png` |
+
+训练命令：
+
+```bash
+source ~/venvs/yolo/bin/activate
+cd ~/桌面/algo-week1/vision
+yolo detect train model=yolov8n.pt data=dataset/data.yaml epochs=15 imgsz=320 batch=8 device=cpu project=runs name=person-train exist_ok=True
+```
+
+15 个 epoch 在 CPU 上跑完。最好的一轮在 6 张验证图、8 个 person 框上是 precision 0.797、recall 1.0、mAP50 0.945。张数很少，而且框来自同一个预训练模型，这个数只说明训练流程跑通了。
+
+自动标注示例：
+
+![标注预览](shots/yolo-label-preview.jpg)
+
+训练曲线：
+
+![训练曲线](shots/yolo-train.png)
+
+新权重在 `vision/runs/detect/runs/person-train/weights/best.pt`，已忽略、不提交。
 
 ### 9. 三分钟讲解稿
 
@@ -179,9 +201,9 @@ Day 10–11 的自采自标训练没有做，按任务单改成交接这份概�
 2. 检测：先建虚拟环境 `~/venvs/yolo`，安装 Ultralytics，用 `yolov8n.pt`。图片检出公交车和行人，视频检出人，USB 摄像头是 Realtek RGB Camera 的 `/dev/video0`，检出 person 0.87。
 3. 报过错：推送 403 是 Token 没有 `repo` 权限；创建虚拟环境缺 `python3-venv`；摄像头第一次接成了笔记本自带相机，而且旧 USB 控制器把画面传花了。
 4. PX4：状态机在 `src/modules/commander/`，看 `arming_state` 和 `nav_state`。对外通信在 `src/modules/mavlink/`，模块之间用 uORB。250 是机架文件 `4050_generic_250`。
-5. 还没做的是自己标 20–30 张再训练。还没看完的是解锁命令怎样从 MAVLink 走进 commander。
+5. 训练：USB 摄像头拍了 30 张，预训练模型自动标了 person，训练 15 个 epoch。曲线在 `shots/yolo-train.png`。框不是手画的。还没看完的是解锁命令怎样从 MAVLink 走进 commander。
 
-飞书提交：把本文件全文复制到飞书文档，图片用 `shots/` 里的四张截图。
+飞书提交：把本文件全文复制到飞书文档，图片用 `shots/` 里的截图。
 
 ## 三、报错库
 
@@ -204,7 +226,8 @@ Day 10–11 的自采自标训练没有做，按任务单改成交接这份概�
 | `vision/runs/` | Ultralytics 自动生成的检测结果，不提交到 Git |
 | `~/venvs/yolo` | 虚拟环境，不放进仓库 |
 | `px4/framework.md` | PX4 250 的目录、状态机、通信和问题清单 |
-| `notes.md` 第八、九节 | YOLO 概念整理，以及三分钟验收讲解稿 |
+| `notes.md` 第八、九节 | YOLO 概念、训练记录，以及三分钟验收讲解稿 |
+| `vision/dataset/data.yaml` | 训练用的数据配置。图片和标注留在本机，不提交 |
 | `~/PX4-Autopilot` | PX4 固件源码，体积大，不放进本仓库 |
 
 `detect.py` 的用法：
