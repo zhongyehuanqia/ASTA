@@ -17,8 +17,9 @@
   - [x] 检测代码写在 `vision/detect.py`，结果截图放在 `shots/`
 - 完成了什么（续）
   - [x] PX4 250 框架初读。源码在 `/home/qia/PX4-Autopilot`，框架图和问题清单在 `px4/framework.md`
+  - [x] USB 摄像头实时检测。设备是 `/dev/video0`，结果在 `shots/yolo-camera.jpg`
 - 没完成什么
-  - [ ] USB 摄像头实时检测。机器上还没有 `/dev/video*`，步骤写在第二节第 6 小节，摄像头到了再做
+  - 本轮计划里的必做项已经做完。Day 10–11 的自采自标训练是选做。
 
 ## 二、操作记录
 
@@ -103,9 +104,9 @@ python detect.py --source sample.mp4
 
 ![视频检测结果](shots/yolo-video.jpg)
 
-### 6. 后续：USB 摄像头实时检测
+### 6. USB 摄像头实时检测
 
-摄像头插上后再做。先确认设备，再把输入从视频文件改成摄像头编号 `0`。
+2026-10-15 外接 USB 摄像头已连进虚拟机。`lsusb` 里是 Realtek RGB Camera（`0bda:5161`），设备节点是 `/dev/video0` 和 `/dev/video1`。笔记本自带的 Syntek Integrated Camera 已断开，检测用的是这颗 RGB Camera 的 `/dev/video0`。
 
 ```bash
 ls /dev/video*
@@ -114,11 +115,15 @@ cd ~/桌面/algo-week1/vision
 python detect.py --source 0
 ```
 
-画面里应出现实时检测框。结束时在终端按 Ctrl+C。截一张带框的画面，保存为 `shots/yolo-camera.jpg`，再补到本节下面。
+`detect.py` 会用 MJPG、640x480 打开摄像头。窗口里按 `q` 退出，稳定后的第一帧存到 `shots/yolo-camera.jpg`。
 
-- [ ] `/dev/video*` 存在
-- [ ] `python detect.py --source 0` 能实时出框
-- [ ] 截图保存到 `shots/yolo-camera.jpg`
+把虚拟机的 USB 控制器改成 USB 3.0，并改连这颗 RGB Camera 之后，画面正常。检出 person 0.87 和 dining table 0.31。
+
+![摄像头检测结果](shots/yolo-camera.jpg)
+
+- [x] `/dev/video0` 存在
+- [x] 画面正常，并且能出检测框
+- [x] 截图保存到 `shots/yolo-camera.jpg`
 
 ### 7. PX4 250 框架初读
 
@@ -143,6 +148,7 @@ git clone --depth 1 --single-branch --branch main https://github.com/PX4/PX4-Aut
 | --- | --- | --- | --- | --- | --- |
 | 2026-10-11 | Git | `Permission to zhongyehuanqia/algo-week1.git denied to zhongyehuanqia`，HTTPS 返回 403 | 用来推送的 Token 没有仓库写入权限 | 重新生成 Classic Token 并勾选 `repo`，在 `git push` 的 Password 提示里粘贴这串 Token | https://github.com/zhongyehuanqia/algo-week1 |
 | 2026-10-14 | Python | `python3 -m venv` 失败，提示 `ensurepip is not available` | 系统没装 `python3-venv` | `sudo apt install python3-venv` 之后重新创建 `~/venvs/yolo` | Ubuntu 20.04 / Python 3.8 |
+| 2026-10-15 | 摄像头 | 第一次连上的是笔记本自带 Syntek 摄像头；旧 USB 控制器下画面还是横条 | 可移动设备里接错了摄像头，且旧控制器损坏 MJPEG | 改成 USB 3.0 控制器，断开 Syntek，连接 Realtek RGB Camera（`0bda:5161`）后再检测 | `/dev/video0` |
 
 ## 四、代码/文件
 
@@ -173,7 +179,7 @@ python detect.py --source 0
   - Git 的一次完整流程是配置身份、`git add`、`git commit`、`git push`。`git status` 看未提交的改动，`git log` 看提交记录。
   - 推送到 GitHub 时，Password 要填勾选了 `repo` 的 Token。Token 只在生成时显示一次，丢了就重新生成。
   - 视觉环境单独放在 `~/venvs/yolo`，避免和系统 Python 混在一起。进入环境后提示符前面有 `(yolo)`。
-  - `yolov8n.pt` 是现成的预训练权重。图片和视频都能检出人；图片里还检出了公交车。
+  - `yolov8n.pt` 是现成的预训练权重。图片检出公交车和行人，视频和 USB 摄像头都检出了人。
   - PX4 的状态机在 `src/modules/commander/`，对外通信在 `src/modules/mavlink/`，模块之间用 uORB。250 是机架参数文件，不是另一套代码。
 - 还没懂什么
   - Token 过期之后，本机如果记住了旧 Token，要在哪里清掉再换新的。
