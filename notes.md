@@ -18,8 +18,10 @@
 - 完成了什么（续）
   - [x] PX4 250 框架初读。源码在 `/home/qia/PX4-Autopilot`，框架图和问题清单在 `px4/framework.md`
   - [x] USB 摄像头实时检测。设备是 `/dev/video0`，结果在 `shots/yolo-camera.jpg`
+  - [x] Day 10–11 选做了概念整理，没有做自采自标训练。说明在第二节第 8 小节
+  - [x] 三分钟讲解稿在第二节第 9 小节。飞书仍需自己把这份笔记贴上去
 - 没完成什么
-  - 本轮计划里的必做项已经做完。Day 10–11 的自采自标训练是选做。
+  - 自采 20–30 张并自己标注后再训练。这次用概念笔记代替了这一项。
 
 ## 二、操作记录
 
@@ -142,6 +144,45 @@ git clone --depth 1 --single-branch --branch main https://github.com/PX4/PX4-Aut
 - 对外通信在 `src/modules/mavlink/`，模块之间用 `platforms/common/uORB` 和 `msg/`。
 - 250 是机架参数：`ROMFS/px4fmu_common/init.d/airframes/4050_generic_250` 和 `4052_holybro_qav250`。
 
+### 8. YOLO 概念整理
+
+Day 10–11 的自采自标训练没有做，按任务单改成交接这份概念笔记。下面这些词都对应这次已经跑过的 `yolov8n.pt`。
+
+预训练和自己训练：
+
+- `yolov8n.pt` 是别人用大型数据集训练好的权重。`n` 表示 nano，模型小、速度快，适合先跑通。
+- 直接 `predict` 就是用现成权重做检测。图片里的 bus、person，视频里的 person，摄像头里的 person 和 dining table，都是这套权重认出来的。
+- 自己训练是换一批自己拍的图，标好框，再让模型多认识你的目标。这次没有拍 20–30 张，也没有标注，所以没有产生新的权重。
+
+一次检测里发生的事：
+
+- 输入是一张图，或视频、摄像头里的一帧。代码里就是 `model.predict(...)`。
+- 模型输出很多候选框。每个框有类别名和置信度，例如 `person 0.87`。置信度越高，模型越肯定。
+- 同一物体常会得到多个重叠框。NMS（非极大值抑制）留下置信度更高的框，去掉重叠的多余框。画面上最后看到的框，是 NMS 之后的结果。
+- `save=True` 或 `result.plot()` 把这些框画回原图。
+
+和这次代码的对应关系：
+
+| 概念 | 在本仓库里 |
+| --- | --- |
+| 预训练权重 | `vision/yolov8n.pt` |
+| 检测入口 | `vision/detect.py` 里的 `model.predict` |
+| 图片结果 | `shots/yolo-bus.jpg` |
+| 视频结果 | `shots/yolo-video.jpg` |
+| 摄像头结果 | `shots/yolo-camera.jpg` |
+
+### 9. 三分钟讲解稿
+
+验收时按这个顺序讲，大约三分钟。
+
+1. 仓库在 https://github.com/zhongyehuanqia/algo-week1 。里面有笔记、`vision/detect.py`、三张检测截图，以及 `px4/framework.md`。
+2. 检测：先建虚拟环境 `~/venvs/yolo`，安装 Ultralytics，用 `yolov8n.pt`。图片检出公交车和行人，视频检出人，USB 摄像头是 Realtek RGB Camera 的 `/dev/video0`，检出 person 0.87。
+3. 报过错：推送 403 是 Token 没有 `repo` 权限；创建虚拟环境缺 `python3-venv`；摄像头第一次接成了笔记本自带相机，而且旧 USB 控制器把画面传花了。
+4. PX4：状态机在 `src/modules/commander/`，看 `arming_state` 和 `nav_state`。对外通信在 `src/modules/mavlink/`，模块之间用 uORB。250 是机架文件 `4050_generic_250`。
+5. 还没做的是自己标 20–30 张再训练。还没看完的是解锁命令怎样从 MAVLink 走进 commander。
+
+飞书提交：把本文件全文复制到飞书文档，图片用 `shots/` 里的四张截图。
+
 ## 三、报错库
 
 | 日期 | 模块 | 报错/现象 | 原因 | 解决 | 参考 |
@@ -163,6 +204,7 @@ git clone --depth 1 --single-branch --branch main https://github.com/PX4/PX4-Aut
 | `vision/runs/` | Ultralytics 自动生成的检测结果，不提交到 Git |
 | `~/venvs/yolo` | 虚拟环境，不放进仓库 |
 | `px4/framework.md` | PX4 250 的目录、状态机、通信和问题清单 |
+| `notes.md` 第八、九节 | YOLO 概念整理，以及三分钟验收讲解稿 |
 | `~/PX4-Autopilot` | PX4 固件源码，体积大，不放进本仓库 |
 
 `detect.py` 的用法：
@@ -181,6 +223,7 @@ python detect.py --source 0
   - 视觉环境单独放在 `~/venvs/yolo`，避免和系统 Python 混在一起。进入环境后提示符前面有 `(yolo)`。
   - `yolov8n.pt` 是现成的预训练权重。图片检出公交车和行人，视频和 USB 摄像头都检出了人。
   - PX4 的状态机在 `src/modules/commander/`，对外通信在 `src/modules/mavlink/`，模块之间用 uORB。250 是机架参数文件，不是另一套代码。
+  - 预训练权重可以直接检测。置信度表示模型有多确定，重叠的多余框会被 NMS 去掉。自己训练需要另外准备标好框的图片。
 - 还没懂什么
   - Token 过期之后，本机如果记住了旧 Token，要在哪里清掉再换新的。
   - 摄像头编号为什么是 `0`，插上两个摄像头时怎么区分。
