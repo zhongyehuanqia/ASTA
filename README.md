@@ -11,4 +11,4 @@
 | `ros/src/detect_demo/` | 检测结果话题：自定义消息、发布节点、订阅节点、launch |
 | `px4/` | PX4 状态机、通信和 250 机架的框架笔记 |
 
-仓库地址：https://github.com/zhongyehuanqia/ros-px4-vision
+本机目录是 `ros-px4-vision`。GitHub 仓库目前仍是 https://github.com/zhongyehuanqia/algo-week1 ，现有 Token 不能改仓库名。
