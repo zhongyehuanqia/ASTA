@@ -2,7 +2,7 @@
 """发布节点：每隔一秒往 /detect 发一条检测结果。"""
 
 import rospy
-from week2_demo.msg import Detect
+from detect_demo.msg import Detect
 
 
 def main():

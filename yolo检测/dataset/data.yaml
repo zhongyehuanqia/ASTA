@@ -1,0 +1,5 @@
+path: /home/qia/桌面/ros-px4-vision/yolo检测/dataset
+train: images/train
+val: images/val
+names:
+  0: person

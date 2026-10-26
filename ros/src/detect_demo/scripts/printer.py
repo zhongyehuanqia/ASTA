@@ -2,7 +2,7 @@
 """订阅节点：收到 /detect 后打印类别和像素坐标。"""
 
 import rospy
-from week2_demo.msg import Detect
+from detect_demo.msg import Detect
 
 
 def callback(msg):

@@ -1,5 +1,0 @@
-path: /home/qia/桌面/algo-week1/vision/dataset
-train: images/train
-val: images/val
-names:
-  0: person

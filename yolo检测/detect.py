@@ -7,7 +7,7 @@
     python detect.py --source sample.mp4
     python detect.py --source 0
 
-摄像头画面按 q 退出。第一张带检测框的画面会存到 ../shots/yolo-camera.jpg。
+摄像头画面按 q 退出。第一张带检测框的画面会存到 截图/yolo-camera.jpg。
 图片和视频的结果保存在 runs/detect/ 下。
 """
 
@@ -29,7 +29,7 @@ def run_camera(model, index):
     if not cap.isOpened():
         raise SystemExit(f"打不开摄像头 {index}。先执行 ls /dev/video* 确认设备存在。")
 
-    shot = Path(__file__).resolve().parents[1] / "shots" / "yolo-camera.jpg"
+    shot = Path(__file__).resolve().parent / "截图" / "yolo-camera.jpg"
     saved = False
     seen = 0
     print("摄像头已打开。前几帧可能是黑的，稍等画面稳定。窗口里按 q 退出。")

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>week2_demo</name>
+  <name>detect_demo</name>
   <version>0.0.1</version>
   <description>把 msg、node、topic 和 launch 连成一条最小链路。</description>
   <maintainer email="2676094696@qq.com">zhongyehuanqia</maintainer>

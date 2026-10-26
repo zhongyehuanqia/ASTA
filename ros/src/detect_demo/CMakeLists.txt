@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(week2_demo)
+project(detect_demo)
 
 find_package(catkin REQUIRED COMPONENTS
   message_generation

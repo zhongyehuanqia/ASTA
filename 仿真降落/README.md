@@ -15,8 +15,8 @@
 ## 怎么跑
 
 ```bash
-cd ~/桌面/第二周任务/视觉仿真
-PYTHONPATH=~/桌面/第二周任务/gym-pybullet-drones \
+cd ~/桌面/ros-px4-vision/仿真降落
+PYTHONPATH=~/桌面/ros-px4-vision/gym-pybullet-drones \
   ~/miniconda3/envs/drones/bin/python vision_land.py
 ```
 
