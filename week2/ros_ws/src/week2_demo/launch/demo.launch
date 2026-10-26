@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="week2_demo" type="detector.py" name="detector" output="screen" />
+  <node pkg="week2_demo" type="printer.py" name="printer" output="screen" />
+</launch>

@@ -9,3 +9,7 @@ vision/*.mp4
 vision/bus.jpg
 vision/dataset/images/
 vision/dataset/labels/
+
+week2/ros_ws/build/
+week2/ros_ws/devel/
+week2/gym-pybullet-drones/
