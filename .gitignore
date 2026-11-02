@@ -9,6 +9,15 @@ yolo检测/*.mp4
 yolo检测/bus.jpg
 yolo检测/dataset/images/
 yolo检测/dataset/labels/
+yolo/yolo检测/runs/
+yolo/yolo检测/*.pt
+yolo/yolo检测/*.mp4
+yolo/yolo检测/pad/runs/
+yolo/yolo检测/pad/**/*.pt
+yolo/yolo检测/pad/*.pt
+yolo/yolo检测/cup/runs/
+yolo/yolo检测/cup/**/*.pt
+yolo/yolo检测/cup/*.pt
 ros/build/
 ros/devel/
 gym-pybullet-drones/
