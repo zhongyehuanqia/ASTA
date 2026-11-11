@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>羽毛肖像壁纸</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #ece8e1;
+      --muted: rgba(236, 232, 225, 0.68);
+      --line: rgba(236, 232, 225, 0.16);
+      --panel: rgba(12, 12, 14, 0.55);
+      --accent: #d7c4a3;
+      --accent-ink: #1a1612;
+      --bg0: #070708;
+      --bg1: #12141a;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(120% 80% at 20% 0%, rgba(180, 190, 210, 0.14), transparent 55%),
+        radial-gradient(90% 70% at 100% 100%, rgba(40, 40, 48, 0.9), transparent 50%),
+        linear-gradient(180deg, var(--bg1), var(--bg0));
+      color: var(--ink);
+      font-family: "Manrope", sans-serif;
+    }
+
+    body {
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: max(20px, env(safe-area-inset-top)) 18px max(28px, env(safe-area-inset-bottom));
+    }
+
+    .shell {
+      width: min(420px, 100%);
+      display: grid;
+      gap: 18px;
+    }
+
+    .brand {
+      font-family: "Instrument Serif", serif;
+      font-size: clamp(2rem, 8vw, 2.6rem);
+      letter-spacing: 0.01em;
+      line-height: 0.95;
+      margin: 0;
+    }
+
+    .lede {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .stage {
+      position: relative;
+      border-radius: 28px;
+      overflow: hidden;
+      isolation: isolate;
+      background: #000;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+      aspect-ratio: 9 / 19.5;
+      max-height: 68dvh;
+    }
+
+    .stage video,
+    .stage img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .stage::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 42%;
+      background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.72));
+      pointer-events: none;
+    }
+
+    .hint {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      z-index: 1;
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.86);
+      line-height: 1.4;
+    }
+
+    .actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 15px 18px;
+      font: inherit;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 160ms ease, opacity 160ms ease;
+    }
+
+    .btn:active { transform: scale(0.98); }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--accent-ink);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    .steps {
+      margin: 0;
+      padding: 16px 16px 16px 34px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+      backdrop-filter: blur(14px);
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .steps strong { color: var(--ink); font-weight: 600; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <h1 class="brand">Feather Lock</h1>
+      <p class="lede">长按预览图可存进相册；再用系统壁纸把它设为锁屏。</p>
+    </header>
+
+    <section class="stage" aria-label="壁纸预览">
+      <video
+        id="preview"
+        poster="assets/preview.jpg"
+        src="assets/wallpaper-live.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+      ></video>
+      <p class="hint">长按画面 → 存储到照片</p>
+    </section>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="assets/wallpaper-still.jpg" download="feather-lock-still.jpg">下载静态壁纸</a>
+      <a class="btn btn-secondary" href="assets/wallpaper-live.mp4" download="feather-lock-live.mp4">下载动态视频</a>
+      <a class="btn btn-secondary" href="assets/wallpaper-live.mov" download="feather-lock-live.mov">下载 HEVC（更小）</a>
+    </div>
+
+    <ol class="steps">
+      <li><strong>存相册：</strong>用 iPhone Safari 打开本页，长按上方画面，选「存储到照片」；或点下载后打开文件并分享到「照片」。</li>
+      <li><strong>设锁屏：</strong>打开「设置 → 墙纸 → 添加新墙纸 → 照片」，选刚保存的图；若选视频/实况，打开「实况照片」效果。</li>
+      <li>本页无法远程改你的锁屏，需在手机上完成最后一步。</li>
+    </ol>
+  </main>
+  <script>
+    const video = document.getElementById("preview");
+    video?.play?.().catch(() => {});
+  </script>
+</body>
+</html>
